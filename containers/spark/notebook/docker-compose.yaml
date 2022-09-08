@@ -1,0 +1,9 @@
+version: '3'
+services:
+  almond-notebook:
+    image: almond/jupyter-notebook
+    volumes:
+      - ../spark-defaults.conf:/usr/local/spark/conf/spark-defaults.conf
+    ports:
+      - "8888:8888"
+      - "4040:4040"

@@ -1,0 +1,48 @@
+version: '3'
+services:
+  spark-master:
+    image: almond/spark
+    container_name: spark-master
+    mem_limit: 1g
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    environment:
+      - SPARK_MODE=MASTER
+    volumes:
+      - ./spark-defaults.conf:/spark/conf/spark-defaults.conf
+    networks:
+      - hadoopnet
+  spark-worker-1:
+    image: almond/spark
+    container_name: spark-worker-1
+    mem_limit: 2g
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - SPARK_MODE=WORKER
+    volumes:
+      - ./spark-defaults.conf:/spark/conf/spark-defaults.conf
+    networks:
+      - hadoopnet
+  notebook:
+    image: almond/notebook
+    container_name: notebook
+    depends_on:
+      - spark-master
+    ports:
+      - "8888:8888"
+      - "4040:4040"
+    volumes:
+      - ./spark-defaults.conf:/spark/conf/spark-defaults.conf
+      - ./data:/opt/spark-data
+    networks:
+      - hadoopnet
+
+networks:
+  hadoopnet:
+    external:
+      name: hadoopnet

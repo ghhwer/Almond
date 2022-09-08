@@ -1,0 +1,17 @@
+FROM almond/spark-base
+
+MAINTAINER Caio Cominato <caiopetrellicominato@gmail.com>
+
+COPY start.sh /
+
+ENV SPARK_LOGS=$SPARK_HOME/logs
+
+ENV SPARK_WORKER_WEBUI_PORT 8081
+ENV SPARK_MASTER "spark://spark-master:7077"
+
+ENV SPARK_MASTER_PORT 7077
+ENV SPARK_MASTER_WEBUI_PORT 8080
+
+EXPOSE 8081 8080 7077 6066
+
+CMD ["/start.sh"]
